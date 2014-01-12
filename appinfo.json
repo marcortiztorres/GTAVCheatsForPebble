@@ -1,0 +1,18 @@
+{
+    "versionLabel": "1.0",
+    "uuid": "0b2832b1-84c3-43f9-bf16-00ea9aa8afe4",
+    "appKeys": {},
+    "longName": "GTA V Cheats",
+    "versionCode": 1,
+    "capabilities": [
+        ""
+    ],
+    "shortName": "GTA V Cheats",
+    "companyName": "David Roman",
+    "watchapp": {
+        "watchface": false
+    },
+    "resources": {
+        "media": []
+    }
+}
