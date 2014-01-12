@@ -15,10 +15,29 @@ int currentButtonIndex;
 int timeIntervalBetweenButtons = 900;
 GColor currentBackgroundColor = GColorWhite;
 
-void initAndShowCheatWindowWithIndex(int index);
+void initCheatWindow();
+void clickConfigProvider(Window * cheatWindow);
+void backButtonClickedHandler(ClickRecognizerRef clickRecognizerRef, void * context);
+void dismissCheatWindow();
+void showCheatWindowWithIndex(int index);
 void showNextButtonOrExit();
 
 // Cheat window implementation
+
+void initCheatWindow() {
+	cheatWindow = window_create();
+	window_set_click_config_provider(cheatWindow, (ClickConfigProvider)clickConfigProvider);
+	
+	buttonText = text_layer_create(layer_get_frame(window_get_root_layer(cheatWindow)));
+}
+
+void clickConfigProvider(Window * cheatWindow) {
+	window_single_click_subscribe(BUTTON_ID_BACK, backButtonClickedHandler);
+}
+
+void backButtonClickedHandler(ClickRecognizerRef clickRecognizerRef, void * context) {
+	dismissCheatWindow();
+}
 
 void dismissCheatWindow() {
 	currentCheatIndex = 0;
@@ -26,26 +45,13 @@ void dismissCheatWindow() {
 	app_timer_cancel(timer);
 	currentBackgroundColor = GColorWhite;
 	window_stack_remove(cheatWindow, true);
-	window_destroy(cheatWindow);
-	text_layer_destroy(buttonText);
 }
 
-void backButtonClickedHandler(ClickRecognizerRef clickRecognizerRef, void * context) {
-	dismissCheatWindow();
-}
-
-void clickConfigProvider(Window * cheatWindow) {
-	window_single_click_subscribe(BUTTON_ID_BACK, backButtonClickedHandler);
-}
-
-void initAndShowCheatWindowWithIndex(int index) {
+void showCheatWindowWithIndex(int index) {
 	currentCheatIndex = index;
 	
-	cheatWindow = window_create();
-	window_set_click_config_provider(cheatWindow, (ClickConfigProvider)clickConfigProvider);
 	window_stack_push(cheatWindow, true);
 	
-	buttonText = text_layer_create(layer_get_frame(window_get_root_layer(cheatWindow)));
 	text_layer_set_text(buttonText, cheats[index].title);
 	text_layer_set_font(buttonText, fonts_get_system_font(FONT_KEY_BITHAM_30_BLACK));
 	text_layer_set_overflow_mode(buttonText, GTextOverflowModeTrailingEllipsis);
@@ -126,11 +132,11 @@ void cheatSelectionCallback(int index, void * context);
 
 // Root window implementation
 
-void initRootWindow() {
+void initAndShowRootWindow() {
 	rootWindow = window_create();
-	window_stack_push(rootWindow, true);
-	
 	initCheatMenu();
+	
+	window_stack_push(rootWindow, true);
 }
 
 void initCheatMenu() {
@@ -149,13 +155,14 @@ void initCheatMenu() {
 }
 
 void cheatSelectionCallback(int index, void * context) {
-	initAndShowCheatWindowWithIndex(index);
+	showCheatWindowWithIndex(index);
 }
 
 // Main methods
 
 void init() {
-	initRootWindow();
+	initAndShowRootWindow();
+	initCheatWindow();
 }
 
 void deinit() {
