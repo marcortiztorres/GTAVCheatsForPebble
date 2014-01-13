@@ -1,7 +1,7 @@
 GTA V Cheats for Pebble
 ===================
 
-Useful watchapp to quickly access GTA V PS3 cheats.
+<br />
 
 <p align="center">
 	<img src="https://raw.github.com/Dromaguirre/GTAVCheatsForPebble/images/1.png" alt="GTAVCheatsForPebble" title="GTAVCheatsForPebble" width="245px" />
